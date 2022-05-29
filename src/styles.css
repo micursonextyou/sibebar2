@@ -1,0 +1,14 @@
+/* You can add global styles to this file, and also import other style files */
+@import url('./assets/css/style.css');
+
+*{
+     margin: 0;
+     padding: 0;
+}
+body{
+     height: 100vh;
+     box-sizing: border-box;
+     direction: ltr;
+     position: relative;
+     overflow: hidden;
+}
