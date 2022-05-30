@@ -12,3 +12,8 @@ body{
      position: relative;
      overflow: hidden;
 }
+.dark{
+     background-color: #161d31!important;
+     color: #FFFFFF;
+     transition: all .3s ease;
+}
