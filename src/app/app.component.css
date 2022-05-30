@@ -75,6 +75,7 @@
      top:1.5rem;
      font-size: 1.3rem;
      transform: translateX(-50%);
+     cursor: pointer;
 }
 .sidebar.active .logo #btnMenu{
      left: 90%;
@@ -83,7 +84,7 @@
      margin: 0;
      height: 430px;
      padding: 10px 14px;     
-     overflow-y: auto;
+     overflow: auto;
 }
 .menu::-webkit-scrollbar{
      width: 3px;     
@@ -118,6 +119,7 @@
      border-radius: 10px;
      overflow: hidden;     
      white-space: nowrap;
+     z-index: 1000;
 }
 .item-menu .item-menu-label i{
      height: 60px;
@@ -139,26 +141,58 @@
      border-radius: 10px;
      color: #ffffff;
 }
-.tooltip{
+.item-menu .item-menu-label.active{
+     background: #283046;
+     border-radius: 10px;
+     color: #ffffff!important;
+     transition: all .3s ease;
+}
+.icon-arrordown{
      position: absolute;
+     right: 0;
+     font-size: 0.6rem!important;
+     height: 50px;
+     width: 10px;
+     text-align: center;
+     transform: rotateZ(-90deg);     
+}
+.item-menu .item-menu-label .icon-arrordown.open{
+     transform: rotateZ(0deg);     
+     transition: all .2s ease;
+}
+
+.menu .item-menu .tooltip{
+     position:absolute;
+     display: none;
      height: 40px;
      width: 120px;
-     top: 10px;
-     left: 90px;     
+     top:10px;
+     left: 150px;     
      border-radius: 30px;
      box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
      text-align: center;
      line-height: 40px;
-     display: block;
+     
      padding: 0;
      align-items: center;
      z-index: 100;
      text-transform: uppercase;
-     font-size: .8rem;
-     display: none;
-        
+     font-size: .8rem;    
+}
+
+.submenu-panel{
+     height: 0;
+     transform: scaleZ(0);
+     transition:height 3s linear;
      
 }
+.item-menu.container-submenu .submenu-panel.collapse {
+     height: fit-content;
+     transform: scaleZ(1);
+     transition: height 3s linear;
+     margin-top: 1rem;
+}
+
 .main-content{
     position: absolute;
     width: calc(100%-80px);
