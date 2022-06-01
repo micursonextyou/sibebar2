@@ -13,10 +13,11 @@ export class AppComponent implements OnInit,AfterContentInit {
   colorhover="";
   
   
-  ngOnInit(): void {
+  ngOnInit(): void {        
+    this.cargarPreferencias();
     this.controlMenu();
-      
   }
+  
   ngAfterContentInit(): void {
     //this.controlMenu();
   }
@@ -27,21 +28,46 @@ export class AppComponent implements OnInit,AfterContentInit {
       a[i].classList.remove("HD","HG","HPI","HBL");
       switch(color){
         case "#d81b60":
-          a[i].classList.add("HPI");        
+          a[i].classList.add("HPI");
+          this.createAndSetCoockie("colorLabel","HPI");
           break;
-        case "#388e3c":       
-          a[i].classList.add("HG");          
+        case "#388e3c":
+          a[i].classList.add("HG");
+          this.createAndSetCoockie("colorLabel","HG");
           break;
         case "#283046":
-          a[i].classList.add("HD");  
+          a[i].classList.add("HD");
+          this.createAndSetCoockie("colorLabel","HD");
           break;
         case "#1e88e5":
-          a[i].classList.add("HBL");  
+          a[i].classList.add("HBL");
+          this.createAndSetCoockie("colorLabel","HBL");
           break;
-          
+      }
+    }   
+  }
+  cargarPreferencias(){
+    let layout=this.getCoockie("darklayout");
+    let mode=this.getCoockie("darkmode");
+    let expanded=this.getCoockie("expanded");
+    let label=this.getCoockie("colorLabel");
+    const body=document.getElementsByTagName("body")[0];    
+    const sideBar=document.getElementById("sidebar");
+    const a=document.querySelectorAll(".item-menu .item-menu-label");
+    if(layout!=""){
+      body.classList.add(layout);
+      sideBar?.classList.add(mode);
+    }
+    if(expanded!=""){
+      sideBar?.classList.add(expanded);
+    }
+    if(label!=""){
+      for(let i=0;i<a.length;i++){
+        a[i].classList.remove("HD","HG","HPI","HBL");
+        a[i].classList.add(label);
       }
     }
-   
+
   }
   
   controlMenu(){
@@ -49,13 +75,18 @@ export class AppComponent implements OnInit,AfterContentInit {
     const sideBar=document.querySelector(".sidebar");   
     const li=document.getElementsByTagName("li");
     const dianoche=document.getElementById("dianoche");
+    
     // TODO: contola el despiegue del menu
     btnMenu?.addEventListener("click",()=>{
       sideBar?.classList.toggle("active");
+      if(sideBar?.classList.contains("active")){
+        this.createAndSetCoockie("expanded","active");        
+      }else{
+        this.createAndSetCoockie("expanded","");
+      }
     });
-   
-   // TODO:  recoremos los li verificando si tiene submenu cuenta con uno lo despliga si no agraga la clase activa
     
+   // TODO:  recoremos los li verificando si tiene submenu cuenta con uno lo despliga si no agraga la clase activa    
     for(let i=0;i<li.length;i++){
       li[i].childNodes[0].addEventListener("click",()=>{        
         if(!li[i].classList.contains("container-submenu")){              
@@ -74,16 +105,46 @@ export class AppComponent implements OnInit,AfterContentInit {
     }   
     
     // TODO: boton para cambiar aspecto claro a obscuro
-      dianoche?.addEventListener("click",()=>{
+      dianoche?.addEventListener("click",()=>{           
       document.getElementsByTagName("body")[0].classList.toggle("dark");
-      document.getElementById("sidebar")?.classList.toggle("dark-mode");
-      
-      
-    });
-    
-    
+      let e=document.getElementsByTagName("body")[0];
+      document.getElementById("sidebar")?.classList.toggle("dark-mode");      
+      if(!e.classList.contains("dark")){
+        this.createAndSetCoockie("darklayout","");
+        this.createAndSetCoockie("darkmode","");
+        
+      }else{
+        this.createAndSetCoockie("darklayout","dark");
+        this.createAndSetCoockie("darkmode","dark-mode");
+      }
+    });    
   }
   
-  
+  setCoockie(nombre:string,valor:string){    
+    let d=new Date();
+    d.setTime(d.getTime()+5*24*60*60*1000);
+    let caduca="expires="+d.toUTCString();
+    document.cookie=nombre+"="+valor+";"+caduca+";path=/";
+  }
+  getCoockie(nombre:string){
+    let nom=nombre+"=";
+    let arrayCookie=document.cookie.split(";");
+    for(let i=0;i<arrayCookie.length;i++){
+      let c=arrayCookie[i];
+      while(c.charAt(0)==" "){
+        c=c.substring(1);        
+      }
+      if(c.indexOf(nombre)==0){
+        return c.substring(nom.length,c.length);
+      }
+    }
+    return "";
+  }
+  deleteCoockie(nombre:string){
+    this.setCoockie(nombre,"");
+  }
+  createAndSetCoockie(nombre:string,valor:string){
+    this.setCoockie(nombre,valor);
+  }
   
 }
